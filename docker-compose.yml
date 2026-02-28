@@ -1,48 +1,70 @@
-services:
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"          # only nginx is exposed to the outside world
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - frontend
-      - backend
+version: '3.8'
 
-  frontend:
-    build: ./client
-    # no ports exposed anymore — nginx handles it
+services:
+  client:
+    build:
+      context: ./client
     volumes:
       - ./client/src:/app/src
+    ports:
+      - "3000:5173"  # Standard Vite port is 5173, mapping 3000 locally
     depends_on:
-      - backend
+      - server
+    environment:
+      - VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY}
+    networks:
+      - app-network
+    command: npm run dev -- --port 5173
 
-  backend:
-    build: ./server
-    # no ports exposed anymore — nginx handles it
+  server:
+    build:
+      context: ./server
     volumes:
       - ./server/src:/app/src
+    ports:
+      - "5000:5000"
     env_file:
       - .env
     depends_on:
       - mongo
+    networks:
+      - app-network
 
   mongo:
     image: mongo:6
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:/data/db
+      - mongo-data:/data/db
+    networks:
+      - app-network
 
   mongo-express:
-    image: mongo-express:1.0.2-20
+    image: mongo-express
     ports:
       - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_BASICAUTH: false
+      - ME_CONFIG_MONGODB_SERVER=mongo
     depends_on:
       - mongo
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - client
+      - server
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
-  mongo_data:
+  mongo-data:

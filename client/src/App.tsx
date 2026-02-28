@@ -1,26 +1,23 @@
-import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import { SignedIn, SignedOut, SignIn } from "@clerk/clerk-react";
+import Dashboard from "./Dashboard";
 
 function App() {
-  const [backendStatus, setBackendStatus] = useState("checking...");
-  const [dbStatus, setDbStatus] = useState("checking...");
-
-  useEffect(() => {
-    fetch("/api/")
-      .then((res) => res.json())
-      .then((data) => setBackendStatus(data.status))
-      .catch(() => setBackendStatus("unreachable"));
-
-    fetch("/api/db-status")
-      .then((res) => res.json())
-      .then((data) => setDbStatus(data.database))
-      .catch(() => setDbStatus("unreachable"));
-  }, []);
-
   return (
-    <div style={{ fontFamily: "sans-serif", padding: "2rem" }}>
-      <h1>Docker Boilerplate</h1>
-      <p>Backend: <strong>{backendStatus}</strong></p>
-      <p>MongoDB: <strong>{dbStatus}</strong></p>
+    <div className="min-h-screen bg-gray-950 text-white flex flex-col font-sans">
+      {/* If Signed Out, show SignIn component centered */}
+      <SignedOut>
+        <div className="flex-1 flex items-center justify-center py-12">
+          <SignIn routing="hash" />
+        </div>
+      </SignedOut>
+
+      {/* If Signed In, show the Dashboard */}
+      <SignedIn>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
+      </SignedIn>
     </div>
   );
 }
