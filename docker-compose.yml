@@ -29,7 +29,7 @@ services:
       - app-network
 
   mongo:
-    image: mongo:6
+    image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
