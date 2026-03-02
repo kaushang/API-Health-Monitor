@@ -1,6 +1,3 @@
-# Note: You MUST add DOCKER_USERNAME and DOCKER_PASSWORD as repository secrets in GitHub
-# Settings -> Secrets and variables -> Actions -> New repository secret
-
 name: CI/CD Pipeline
 
 on:
@@ -53,7 +50,7 @@ jobs:
           context: ./server
           file: ./server/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/health-monitor-server:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/api-health-monitor-server:latest
 
       - name: Build and Push Client Image
         uses: docker/build-push-action@v5
@@ -61,4 +58,4 @@ jobs:
           context: ./client
           file: ./client/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/health-monitor-client:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/api-health-monitor-client:latest
