@@ -78,8 +78,8 @@ No Node.js, no MongoDB, and no other dependencies need to be installed on your m
 
 Choose the section that applies to you:
 
-- [I want to run the app](#option-1-production-mode-pre-built-images-from-docker-hub)
-- [I want to develop and edit the code](#option-2-development-mode-builds-from-source-hot-reload-enabled)
+- [I want to run the app](#option-1---production-mode-pre-built-images-from-docker-hub)
+- [I want to develop and edit the code](#option-2---development-mode-builds-from-source-hot-reload-enabled)
 
 ### Option 1 - Production Mode (pre-built images from Docker Hub)
 
