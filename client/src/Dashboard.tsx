@@ -93,7 +93,7 @@ export default function Dashboard() {
         },
         body: JSON.stringify({ name, url }),
       });
-
+      
       if (res.ok) {
         setName("");
         setUrl("");

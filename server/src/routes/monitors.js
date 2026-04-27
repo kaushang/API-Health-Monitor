@@ -12,11 +12,11 @@ router.post('/', async (req, res) => {
   try {
     const { url, name } = req.body;
     const userId = req.auth.userId;
-
+    
     if (!url || !name) {
       return res.status(400).json({ error: 'URL and name are required' });
     }
-
+    
     const newMonitor = new Monitor({ userId, url, name });
     await newMonitor.save();
 
